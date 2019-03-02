@@ -1,8 +1,12 @@
 #!/bin/bash
 
 source "${BASEDIR}/scripts/lib/logs.sh"
-
+source "${BASEDIR}/scripts/lib/findnao.sh"
 function upload {
+  findnao $RSYNC_TARGET
+  if [ "$?" -ne 1 ]; then
+    return 1
+  fi
   if [ "$#" -ne 5 ]; then
     return 1
   fi
@@ -35,12 +39,11 @@ function upload {
     ln -s "${BASEDIR}/home/preferences" "${TMP_DIR}/naoqi/preferences"
     ln -s "${BASEDIR}/home/configuration" "${TMP_DIR}/naoqi/configuration"
   fi
-  ln -s "${BASEDIR}/home/motions" "${TMP_DIR}/naoqi/motions"
-  ln -s "${BASEDIR}/home/poses"   "${TMP_DIR}/naoqi/poses"
+  #ln -s "${BASEDIR}/home/motions" "${TMP_DIR}/naoqi/motions"
+  #ln -s "${BASEDIR}/home/poses"   "${TMP_DIR}/naoqi/poses"
 
   ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/launcher/launcher" "${TMP_DIR}/naoqi/bin/launcher"
   ln -s ${BASEDIR}/build/nao/${BUILD_TYPE}/src/engines/lib*.so ${TMP_DIR}/naoqi/lib/   # quotation marks removed because of glob regex
-
   # ssh wants the key permissions to be like that
   if [ -e "${SSH_KEY}" ]; then
     chmod 400 "${SSH_KEY}"
