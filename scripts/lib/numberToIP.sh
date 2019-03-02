@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEAM_NUMBER="xx"
+TEAM_NUMBER="1"
 
 function numberToIP {
   if [ "$#" -ne 1 ]; then
