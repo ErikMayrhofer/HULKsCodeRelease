@@ -20,7 +20,7 @@ elseif(SIMROBOT)
   endif(NOT SIMROBOT_INCLUDE_DIRS)
 endif(NAO AND NAONATIVE)
 
-project(tuhhnao)
+project(duckburg)
 
 # Set CMAKE_MODULE_PATH to assist cmake in finding our own package definitions
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake")
@@ -49,8 +49,8 @@ endif(NAO)
 #add_subdirectory(src/vision)
 #add_subdirectory(src/motion)
 
-#add_subdirectory(src/core)
-#add_subdirectory(src/engines)
+add_subdirectory(src/core)
+add_subdirectory(src/engines)
 #add_subdirectory(src/hal)
 add_subdirectory(src/launcher)
 
