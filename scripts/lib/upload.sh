@@ -37,8 +37,9 @@ function upload {
   fi
   ln -s "${BASEDIR}/home/motions" "${TMP_DIR}/naoqi/motions"
   ln -s "${BASEDIR}/home/poses"   "${TMP_DIR}/naoqi/poses"
-  ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/tuhhsdk/libtuhhALModule.so" "${TMP_DIR}/naoqi/lib/libtuhhALModule.so"
-  ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/tuhhsdk/tuhhNao" "${TMP_DIR}/naoqi/bin/tuhhNao"
+
+  ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/launcher/launcher" "${TMP_DIR}/naoqi/bin/launcher"
+  ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/engines/lib*.so" "${TMP_DIR}/naoqi/lib/"
 
   # ssh wants the key permissions to be like that
   if [ -e "${SSH_KEY}" ]; then
