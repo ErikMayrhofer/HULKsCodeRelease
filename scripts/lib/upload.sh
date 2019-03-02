@@ -39,7 +39,7 @@ function upload {
   ln -s "${BASEDIR}/home/poses"   "${TMP_DIR}/naoqi/poses"
 
   ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/launcher/launcher" "${TMP_DIR}/naoqi/bin/launcher"
-  ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/engines/lib*.so" "${TMP_DIR}/naoqi/lib/"
+  ln -s ${BASEDIR}/build/nao/${BUILD_TYPE}/src/engines/lib*.so ${TMP_DIR}/naoqi/lib/   # quotation marks removed because of glob regex
 
   # ssh wants the key permissions to be like that
   if [ -e "${SSH_KEY}" ]; then
