@@ -3,15 +3,16 @@
 source "${BASEDIR}/scripts/lib/logs.sh"
 source "${BASEDIR}/scripts/lib/findnao.sh"
 function upload {
-  findnao $RSYNC_TARGET
-  if [ "$?" -ne 1 ]; then
-    return 1
-  fi
+
   if [ "$#" -ne 5 ]; then
     return 1
   fi
   local BASEDIR="$1"
   local RSYNC_TARGET="$2"
+    findnao $RSYNC_TARGET
+  if [ "$?" -ne 1 ]; then
+    return 1
+  fi
   local BUILD_TYPE="$3"
   local UPLOAD_CONFIG=$4
   local DELETE_FILES=$5
