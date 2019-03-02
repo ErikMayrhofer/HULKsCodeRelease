@@ -10,7 +10,7 @@ function upload {
   local BASEDIR="$1"
   local RSYNC_TARGET="$2"
     findnao $RSYNC_TARGET
-  if [ "$?" -ne 1 ]; then
+  if [ "$?" -ne 0 ]; then
     return 1
   fi
   local BUILD_TYPE="$3"
@@ -37,7 +37,7 @@ function upload {
   mkdir -p "${TMP_DIR}/naoqi/filetransport_ball_candidates"
 
   if ${UPLOAD_CONFIG}; then
-    ln -s "${BASEDIR}/home/preferences" "${TMP_DIR}/naoqi/preferences"
+    # ln -s "${BASEDIR}/home/preferences" "${TMP_DIR}/naoqi/preferences"
     ln -s "${BASEDIR}/home/configuration" "${TMP_DIR}/naoqi/configuration"
   fi
   #ln -s "${BASEDIR}/home/motions" "${TMP_DIR}/naoqi/motions"

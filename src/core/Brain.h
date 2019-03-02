@@ -158,7 +158,7 @@ public:
      * Load specified Engines from a config file
      * @param filename Is conf.xml by default
      */
-    void loadEngines(std::string filename = "conf.xml");
+    void loadEngines(std::string filename = "../configuration/duckburg/engines.xml"); //TODO Configuration-Provier -> so that you don't have to specify the whole path
 
     /***
      * This method is called by the loadEngines above and contains the logic for loading the Engines

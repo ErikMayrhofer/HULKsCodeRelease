@@ -98,7 +98,10 @@ void Brain::loadEngines(std::istream & recipe) {    //TODO UNTESTED
                 auto name = v.second.get<std::string>("NAME");
                 LFINFO("Loading: '" << name << "' from '" << fileName << "'");
                 auto engine = dl_load_class<EngineBase>(fileName,name);
+                LFINFO(" - Found engine: '" << name << "' from '" << fileName << "'" << " (now at: " << engine << ")");
+                LINFO(" - Trying to access engine...")
                 int enBaseVersion = engine->getEngineBaseVersion();
+                LFINFO(" - Accessed engine successfully, retrieved BaseVersion: " << enBaseVersion)
                 if(enBaseVersion != ENGINE_BASE_VERSION) {
                     throw std::runtime_error("Could not load '" + name + "' because "
                                              "it was compiled against an older version of Duckburg. "
