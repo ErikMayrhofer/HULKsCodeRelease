@@ -1,0 +1,9 @@
+//
+// Created by obyoxar on 18/10/18.
+//
+
+#ifndef DUCKBURG_STANDARDINTENTS_H
+#define DUCKBURG_STANDARDINTENTS_H
+
+
+#endif //DUCKBURG_STANDARDINTENTS_H

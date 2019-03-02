@@ -1,0 +1,23 @@
+<ENGINES>
+    <ENGINE>
+        <FILENAME>libExampleEngine.so</FILENAME>
+        <NAME>ExampleEngine</NAME>
+        <PROPERTIES>
+            <TEST>44</TEST>
+        </PROPERTIES>
+    </ENGINE>
+    <ENGINE>
+        <FILENAME>libRemoteEngine.so</FILENAME>
+        <NAME>RemoteEngine</NAME>
+        <PROPERTIES>
+            <PORT>8081</PORT>
+        </PROPERTIES>
+    </ENGINE>
+    <ENGINE>
+        <FILENAME>libLoggingEngine.so</FILENAME>
+        <NAME>LoggingEngine</NAME>
+        <PROPERTIES>
+            <TEST>Tust</TEST>
+        </PROPERTIES>
+    </ENGINE>
+</ENGINES>
