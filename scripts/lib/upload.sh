@@ -51,7 +51,7 @@ function upload {
   fi
 
   # ssh connection command with parameters; check also the top config part
-  local SSH_CMD="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l ${SSH_USERNAME} -i \"${SSH_KEY}\""
+  local SSH_CMD="ssh -p 2222 -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l ${SSH_USERNAME} -i \"${SSH_KEY}\""
 
   # parameters for rsync
   local RSYNC_PARAMETERS="-trzKLP ${RSYNC_EXCLUDE}"

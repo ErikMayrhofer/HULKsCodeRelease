@@ -141,7 +141,7 @@ function run {
 
   # last parameter has to be the hostname of the NAO
   NAO=$(numberToIP "$1")
-
+NAO=localhost
   if [ "${BUILD_TYPE}" == "" ]; then
     msg -e "It seems you haven't compiled before! You need to specify a build type to this script."
     return 1

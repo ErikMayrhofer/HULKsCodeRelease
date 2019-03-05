@@ -7,7 +7,7 @@ function naocmd {
   local BASEDIR="$1"
   local NAME="$2"
   local COMMAND="$3"
-  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -o ConnectTimeout=5 -l nao -i "${BASEDIR}/scripts/ssh_key" -t "${NAME}" "${COMMAND}"
+  ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -o ConnectTimeout=5 -l nao -i "${BASEDIR}/scripts/ssh_key" -t "${NAME}" "${COMMAND}"
 }
 
 function naossh {
@@ -16,7 +16,7 @@ function naossh {
   fi
   local BASEDIR="$1"
   local NAME="$2"
-  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -l nao -i "${BASEDIR}/scripts/ssh_key" "${NAME}"
+  ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -l nao -i "${BASEDIR}/scripts/ssh_key" "${NAME}"
 }
 
 function naocp {
@@ -27,8 +27,8 @@ function naocp {
   # take all arguments from second to penultimate one as source
   local SRC=${@:2:$(expr $# - 2)}
   # take last argument as destination
-  local DST=${@:$#}
-  scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -i "${BASEDIR}/scripts/ssh_key" -r ${SRC} "${DST}"
+    DST=nao@localhost:sysroot.tar.bz2
+  scp -P 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r ${SRC} "${DST}"
 }
 
 function naocmdpass {
