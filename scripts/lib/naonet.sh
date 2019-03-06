@@ -27,7 +27,7 @@ function naocp {
   # take all arguments from second to penultimate one as source
   local SRC=${@:2:$(expr $# - 2)}
   # take last argument as destination
-    DST=nao@localhost:sysroot.tar.bz2
+  local DST=${@:$#}
   scp -P 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r ${SRC} "${DST}"
 }
 

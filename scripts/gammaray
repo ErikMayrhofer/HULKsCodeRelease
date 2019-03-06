@@ -33,6 +33,7 @@ function run {
   SYSROOT_ONLY=false
   # whether all other sysroots should be removed from the NAO
   PURGE=false
+  VM=false
   # prepare parameters
   PARAMETERS=""
   while [ "$#" -gt 0 ]; do
@@ -65,6 +66,9 @@ function run {
       "-p" | "--purge")
         PURGE=true
         ;;
+        "-v")
+        VM=true
+        ;;
       "-h" | "--help")
         helpMenu
         return 0
@@ -92,6 +96,9 @@ function run {
   NAO="$1"
   if [ "${ADDRESS}" == "" ]; then
     ADDRESS=$(numberToIP "${NAO}")
+  fi
+  if [ "$VM" = "true" ];then
+    ADDRESS=localhost
   fi
 
   if ! ${SYSROOT_ONLY}; then
@@ -157,7 +164,7 @@ function run {
 
   if ${PURGE}; then
     msg -n "Removing all sysroots from ${ADDRESS}."
-    naocmd "${BASEDIR}" "localhost" "rm -rf /home/nao/sysroot*"
+    naocmd "${BASEDIR}" "${ADDRESS}" "rm -rf /home/nao/sysroot*"
     if [ "$?" -ne 0 ]; then
       msg -e "Could not remove sysroots from ${ADDRESS}."
       return 1
@@ -165,14 +172,14 @@ function run {
   fi
 
   msg -n "Copying sysroot to ${ADDRESS}."
-  naocp "${BASEDIR}" "${BASEDIR}/toolchain/sysroot.tar.bz2" "nao@localhost:sysroot.tar.bz2"
+  naocp "${BASEDIR}" "${BASEDIR}/toolchain/sysroot.tar.bz2" "nao@${ADDRESS}:sysroot.tar.bz2"
   if [ "$?" -ne 0 ]; then
     msg -e "Could not copy sysroot archive to ${ADDRESS}!"
     return 1
   fi
 
   msg -n "Extracting sysroot on ${ADDRESS}."
-  naocmd "${BASEDIR}" "localhost" "tar xjf sysroot.tar.bz2; rm sysroot.tar.bz2; sync"
+  naocmd "${BASEDIR}" "${ADDRESS}" "tar xjf sysroot.tar.bz2; rm sysroot.tar.bz2; sync"
   if [ "$?" -ne 0 ]; then
     msg -e "Could not extract sysroot archive on ${ADDRESS}!"
     return 1
