@@ -3,7 +3,8 @@
 ## Notes
 
 * Rename hulk processes in pregame and postgame scripts to duckinga.
-* When using Windows and Docker, the docker ... line in the docker.sh scripts needs to changed to winpty docker ... because otherwise it will fail because there is no TTY shell.
+* Hardlinks (ln) actually works on Windows.
+* When using Windows, Git Bash and Docker, the docker ... line in the docker.sh scripts needs to changed to winpty docker ... because otherwise it will fail because there is no TTY shell.
 
 ## Scripts
 
@@ -34,3 +35,7 @@ Compiles for build_type RELEASE and uploads the files to all NAOs in a given net
 ### postgame
 
 Terminates all hulk processes and sets the network.
+
+### gammaray
+
+Sets up the NAO with all important HULK features. It can install everything or only the sysroot and remove all other sysroots from the NAO.
