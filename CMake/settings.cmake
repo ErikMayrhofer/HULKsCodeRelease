@@ -9,6 +9,7 @@ endif(NOT (CMAKE_CXX_COMPILER_ID MATCHES "MSVC"))
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Check for the GNU compiler.
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
@@ -84,3 +85,4 @@ function(assign_source_group)
         source_group("${_source_path_msvc}" FILES "${_source}")
     endforeach()
 endfunction(assign_source_group)
+

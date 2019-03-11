@@ -24,7 +24,7 @@ void RemoteEngine::onLoad() {
     Brain::getInstance()->addDispatcher(INTENTID_ON_BRAIN_RUN, BINDTHIS(RemoteEngine::onRun));
 }
 
-void RemoteEngine::onRun(void* UNUSED(data)) {
+void RemoteEngine::onRun(void*) {
     std::thread serverThread(&RemoteEngine::startServer, this);
     serverThread.detach();
 }
@@ -58,7 +58,7 @@ void RemoteEngine::startServer() {
     LINFO("Closed thread successfully");
 }
 
-void RemoteEngine::issueIntent(void * UNUSED(data)) {
+void RemoteEngine::issueIntent(void *) {
     if (!intents.empty()) {
         Intent* qIntent;
         intents.pop(qIntent);
