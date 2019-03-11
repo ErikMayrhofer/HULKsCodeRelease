@@ -13,3 +13,10 @@ function assertDependenciesInstallScript {
     shift
   done
 }
+
+function assertDependenciesHost {
+  for TOOL in "docker"; do
+    hash "${TOOL}" 2>/dev/null || { echo >&2 "${TOOL} is not installed. Consult https://github.com/HULKs/nao/wiki/System-Setup for finding information on how to install things."; exit 1; }
+    shift
+  done
+}
