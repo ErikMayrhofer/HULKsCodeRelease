@@ -33,7 +33,7 @@ function run {
   SYSROOT_ONLY=false
   # whether all other sysroots should be removed from the NAO
   PURGE=false
-  VM=false
+  TARGET_PORT="22"
   # prepare parameters
   PARAMETERS=""
   while [ "$#" -gt 0 ]; do
@@ -66,12 +66,13 @@ function run {
       "-p" | "--purge")
         PURGE=true
         ;;
-        "-v")
-        VM=true
-        ;;
       "-h" | "--help")
         helpMenu
         return 0
+        ;;
+        "-P")
+        shift
+        TARGET_PORT="$1"
         ;;
       *)
         msg -e "Failed to parse \"$1\"!"
@@ -97,13 +98,10 @@ function run {
   if [ "${ADDRESS}" == "" ]; then
     ADDRESS=$(numberToIP "${NAO}")
   fi
-  if [ "$VM" = "true" ];then
-    ADDRESS=localhost
-  fi
-
+    echo "$ADDRESS:$TARGET_PORT"
   if ! ${SYSROOT_ONLY}; then
     msg -n "Removing old install directory from ${ADDRESS}."
-    naocmdpass "${ADDRESS}" "rm -rf /home/nao/files"
+    naocmdpass "${ADDRESS}" "${TARGET_PORT}" "rm -rf /home/nao/files"
     if [ "$?" -ne 0 ]; then
       msg -e "Could not remove old install directory from ${ADDRESS}!"
       return 1
@@ -127,7 +125,7 @@ function run {
     echo "roboducks${NAO}" > "${INSTALL_DIR}/hostname"
 
     msg -n "Copying files to ${ADDRESS}."
-    naocppass "${INSTALL_DIR}" "nao@${ADDRESS}:files"
+    naocppass "${INSTALL_DIR}" "$TARGET_PORT" "nao@${ADDRESS}:files"
     if [ "$?" -ne 0 ]; then
       rm -rf "${INSTALL_DIR}"
       msg -e "Could not copy files to ${ADDRESS}!"
@@ -136,7 +134,7 @@ function run {
     rm -rf "${INSTALL_DIR}"
 
     msg -n "Executing install script on ${ADDRESS}. You will have to enter the root password of the NAO."
-    naocmdpass "${ADDRESS}" "su -c /home/nao/files/install"
+    naocmdpass "${ADDRESS}" "$TARGET_PORT" "su -c /home/nao/files/install"
     if [ "$?" -ne 0 ]; then
       msg -e "Could not execute install script on ${ADDRESS}!"
       return 1
@@ -164,7 +162,7 @@ function run {
 
   if ${PURGE}; then
     msg -n "Removing all sysroots from ${ADDRESS}."
-    naocmd "${BASEDIR}" "${ADDRESS}" "rm -rf /home/nao/sysroot*"
+    naocmd "${BASEDIR}" "${ADDRESS}" "$TARGET_PORT" "rm -rf /home/nao/sysroot*"
     if [ "$?" -ne 0 ]; then
       msg -e "Could not remove sysroots from ${ADDRESS}."
       return 1
@@ -172,20 +170,20 @@ function run {
   fi
 
   msg -n "Copying sysroot to ${ADDRESS}."
-  naocp "${BASEDIR}" "${BASEDIR}/toolchain/sysroot.tar.bz2" "nao@${ADDRESS}:sysroot.tar.bz2"
+  naocp "${BASEDIR}" "$TARGET_PORT" "${BASEDIR}/toolchain/sysroot.tar.bz2" "nao@${ADDRESS}:sysroot.tar.bz2"
   if [ "$?" -ne 0 ]; then
     msg -e "Could not copy sysroot archive to ${ADDRESS}!"
     return 1
   fi
 
   msg -n "Extracting sysroot on ${ADDRESS}."
-  naocmd "${BASEDIR}" "${ADDRESS}" "tar xjf sysroot.tar.bz2; rm sysroot.tar.bz2; sync"
+  naocmd "${BASEDIR}" "${ADDRESS}" "$TARGET_PORT" "tar xjfv sysroot.tar.bz2; rm sysroot.tar.bz2; sync"
   if [ "$?" -ne 0 ]; then
     msg -e "Could not extract sysroot archive on ${ADDRESS}!"
     return 1
   fi
 
-  msg -s "Successfully installed ${NAO}!"
+  msg -s "Successfully installed ${ADDRESS}!"
 }
 
 handleDocker "${BASEDIR}" "$@"
