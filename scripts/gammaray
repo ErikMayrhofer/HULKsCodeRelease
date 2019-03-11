@@ -15,6 +15,7 @@ function helpMenu {
   echo ""
   echo "Options"
   echo " -a, --address ADDRESS             connect to the NAO via a special address"
+  echo " -P PORT                           connect to the NAO via a special port"
   echo " -w, --wait                        wait until the NAO is reachable after reboot instead of quitting"
   echo " -s, --sysroot-only                only install the sysroot"
   echo " -p, --purge                       remove all other sysroots on the NAO"

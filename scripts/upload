@@ -17,6 +17,8 @@ function helpMenu {
   echo "Usage: $0 [OPTIONS] NAO"
   echo ""
   echo "Options"
+  echo " -a, --address ADDRESS             connect to the NAO via a special address"
+  echo " -P PORT                           connect to the NAO via a special port"
   echo " -d, --delete                      delete extraneous files from target NAO (implies --config)"
   echo " -c, --config                      upload config"
   echo " -b, --build-type BUILD_TYPE       use the specified build type (one out of Debug, Develop, Release)"
