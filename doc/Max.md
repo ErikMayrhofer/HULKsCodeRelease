@@ -27,8 +27,6 @@ ${BASEDIR}/home/configuration/location/default/tuhh_autoload.json
 
 ```js
 {
-  ```js
-{
   "moduleSetup" : "fullVisionFake", //{default, fullVisionFake, replay, oldWalking}
   "sharedObjects" : [
     {
@@ -44,3 +42,16 @@ ${BASEDIR}/home/configuration/location/default/tuhh_autoload.json
 ```
 
 It basically tells the Hulks wether or not they should enable all vision functionality
+
+## toolchain ##
+
+* init  
+    Initially creates a symlink from ~/naotoolchain/ to the {CodeRelease_Toolchain_Repo} (according to toolchain_type and toolchain_version)
+* docker  
+    Resets or creates docker-stuff for the HULKsCodeRelease
+* list  
+    Lists the current version of all toolchain_types
+* select
+    Creates a symlink from ~/naotoolchain/ to the {CodeRelease_Toolchain_Repo} (according to toolchain_type and toolchain_version)
+* update
+    Creates a symlink from ~/naotoolchain/ to the {CodeRelease_Toolchain_Repo} (according to toolchain_type and toolchain_version) (would also try to download the toolchains if the server still existed)
