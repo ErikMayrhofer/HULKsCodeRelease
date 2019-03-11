@@ -36,9 +36,11 @@ function naocp {
   local SRC=${@:2:$(expr $# - 2)}
   # take last argument as destination
   local DST=${@:$#}
-  IP=$(cut -d: -f1 $DST)
+  TARGET=$(echo "$DST" | cut -d: -f1)
+  IP=$(echo "$DST" | cut -d@ -f2)
+  echo "$IP"
   if [[ IP="localhost" ]]; then
-    TARGET_PORT="-p 2222"
+    TARGET_PORT="-P 2222"
   fi
   scp $TARGET_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r ${SRC} "${DST}"
 }
@@ -49,7 +51,11 @@ function naocmdpass {
   fi
   local NAME="$1"
   local COMMAND="$2"
-  sshpass -p nao ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -l nao -t "${NAME}" "${COMMAND}"
+  TARGET=$(echo "$DST" | cut -d: -f1)
+  if [[ TARGET="localhost" ]]; then
+    TARGET_PORT="-p 2222"
+  fi
+  sshpass -p nao ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet $TARGET_PORT -l nao -t "${NAME}" "${COMMAND}"
 }
 
 function naocppass {
@@ -58,5 +64,9 @@ function naocppass {
   fi
   local SRC="$1"
   local DST="$2"
-  sshpass -p nao scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r "${SRC}" "${DST}"
+  TARGET=$(echo "$DST" | cut -d: -f1)
+  if [[ TARGET="localhost" ]]; then
+    TARGET_PORT="-p 2222"
+  fi
+  sshpass -p nao scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r $TARGET_PORT "${SRC}" "${DST}"
 }
