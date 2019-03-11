@@ -17,6 +17,8 @@ function helpMenu {
   echo "Usage: $0 [OPTIONS] NAO"
   echo ""
   echo "Options"
+  echo " -a, --address ADDRESS             connect to the NAO via a special address"
+  echo " -P PORT                           connect to the NAO via a special port"
   echo " -d, --delete                      delete extraneous files from target NAO (implies --config)"
   echo " -c, --config                      upload config"
   echo " -b, --build-type BUILD_TYPE       use the specified build type (one out of Debug, Develop, Release)"
@@ -46,6 +48,9 @@ function run {
   RESTART_NAOQI=false
   # set default job number to cores + 1
   JOBS=$(njobs)
+  TARGET_PORT="22"
+  ADDRESS=""
+  # set default upload to vm as false
   # read the build type from a file
   if [ -f "${BASEDIR}/.current.bt" ]; then
     BUILD_TYPE=`cat "${BASEDIR}/.current.bt"`
@@ -66,6 +71,15 @@ function run {
 
   while [ "$#" -gt 1 ]; do
     case "$1" in
+      "-a" | "--address")
+        shift
+        ADDRESS="$1"
+        if [[ $1 =~ ^- ]]; then
+          msg -e "--address needs an address as parameter! \"$1\" does not look like that."
+          helpMenu
+          return 1
+        fi
+        ;;
       "-l" | "--logdir")
         shift
         if [ "$#" -eq 0 ]; then
@@ -121,6 +135,10 @@ function run {
         helpMenu
         return 0
         ;;
+        "-P")
+        shift
+        TARGET_PORT="$1"
+        ;;
       *)
         msg -e "Failed to parse \"$1\"!"
         helpMenu
@@ -140,7 +158,13 @@ function run {
   fi
 
   # last parameter has to be the hostname of the NAO
-  NAO=$(numberToIP "$1")
+
+  NAO="$1"
+  if [ "${ADDRESS}" == "" ]; then
+    ADDRESS=$(numberToIP "${NAO}")
+  fi
+
+
 
   if [ "${BUILD_TYPE}" == "" ]; then
     msg -e "It seems you haven't compiled before! You need to specify a build type to this script."
@@ -162,44 +186,44 @@ function run {
 
   # download logs
   if [ ! "${LOGDIR}" == "" ]; then
-    download_logs "$BASEDIR" "$NAO" "$LOGDIR"
+    download_logs "$BASEDIR" "$ADDRESS" "$LOGDIR"
   fi
 
-  msg -n "Stopping ${NAO}."
-  naocmd "${BASEDIR}" "${NAO}" "sudo /etc/init.d/hulk stop; killall -SIGTERM tuhhNao 2>/dev/null; exit 0"
+  msg -n "Stopping ${ADDRESS}."
+  naocmd "${BASEDIR}" "${ADDRESS}" "$TARGET_PORT" "sudo /etc/init.d/hulk stop; killall -SIGTERM tuhhNao 2>/dev/null; exit 0"
   if [ "$?" -ne 0 ]; then
-    msg -e "Failed to stop ${NAO}!"
+    msg -e "Failed to stop ${ADDRESS}!"
     return 1
   fi
 
   if ${RESTART_NAOQI}; then
-    msg -n "Stopping naoqi on ${NAO}."
-    naocmd "${BASEDIR}" "${NAO}" "sudo /etc/init.d/naoqi stop"
+    msg -n "Stopping naoqi on ${ADDRESS}."
+    naocmd "${BASEDIR}" "${ADDRESS}" "$TARGET_PORT" "sudo /etc/init.d/naoqi stop"
     if [ "$?" -ne 0 ]; then
-      msg -e "Failed to stop naoqi on ${NAO}!"
+      msg -e "Failed to stop naoqi on ${ADDRESS}!"
       return 1
     fi
   fi
 
   # real upload
-  msg -n "Uploading configuration ${BUILD_TYPE} to ${NAO}."
+  msg -n "Uploading configuration ${BUILD_TYPE} to ${ADDRESS}."
   set_start_time
-  upload "${BASEDIR}" "${NAO}" "${BUILD_TYPE}" ${UPLOAD_CONFIG} ${DELETE_FILES}
+  upload "${BASEDIR}" "${ADDRESS}" "$TARGET_PORT" "${BUILD_TYPE}" ${UPLOAD_CONFIG} ${DELETE_FILES}
   if [ "$?" -ne 0 ]; then
-    msg -e "Upload to ${NAO} failed!"
+    msg -e "Upload to ${ADDRESS} failed!"
     return 1
   fi
   get_time_diff
-  msg -s "Upload to ${NAO} finished successfully in ${DIFF}!"
+  msg -s "Upload to ${ADDRESS} finished successfully in ${DIFF}!"
 
   if ${RESTART}; then
-    msg -n "Restarting the hulk service on ${NAO}."
-    naocmd "${BASEDIR}" "${NAO}" "sudo /etc/init.d/hulk start"
+    msg -n "Restarting the hulk service on ${ADDRESS}."
+    naocmd "${BASEDIR}" "${ADDRESS}" "$TARGET_PORT" "sudo /etc/init.d/hulk start"
     if [ "$?" -ne 0 ]; then
-      msg -e "Failed to restart the hulk service on ${NAO}!"
+      msg -e "Failed to restart the hulk service on ${ADDRESS}!"
       return 1
     fi
-    msg -s "Successfully restarted the hulk service on ${NAO}!"
+    msg -s "Successfully restarted the hulk service on ${ADDRESS}!"
   fi
   return 0
 }
