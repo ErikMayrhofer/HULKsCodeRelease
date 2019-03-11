@@ -7,7 +7,11 @@ function naocmd {
   local BASEDIR="$1"
   local NAME="$2"
   local COMMAND="$3"
-  ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -o ConnectTimeout=5 -l nao -i "${BASEDIR}/scripts/ssh_key" -t "${NAME}" "${COMMAND}"
+  TARGET_PORT=""
+  if [[ $NAME="localhost" ]]; then
+    TARGET_PORT="-p 2222"
+  fi
+  ssh $TARGET_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -o ConnectTimeout=5 -l nao -i "${BASEDIR}/scripts/ssh_key" -t "${NAME}" "${COMMAND}"
 }
 
 function naossh {
@@ -16,7 +20,11 @@ function naossh {
   fi
   local BASEDIR="$1"
   local NAME="$2"
-  ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -l nao -i "${BASEDIR}/scripts/ssh_key" "${NAME}"
+  TARGET_PORT=""
+  if [[ $RSYNC_TARGET="localhost" ]]; then
+    TARGET_PORT="-p 2222"
+  fi
+  ssh $TARGET_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -l nao -i "${BASEDIR}/scripts/ssh_key" "${NAME}"
 }
 
 function naocp {
@@ -28,7 +36,11 @@ function naocp {
   local SRC=${@:2:$(expr $# - 2)}
   # take last argument as destination
   local DST=${@:$#}
-  scp -P 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r ${SRC} "${DST}"
+  IP=$(cut -d: -f1 $DST)
+  if [[ IP="localhost" ]]; then
+    TARGET_PORT="-p 2222"
+  fi
+  scp $TARGET_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o LogLevel=quiet -r ${SRC} "${DST}"
 }
 
 function naocmdpass {
