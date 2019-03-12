@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Get base directory for better referencing
+BASEDIR=`cd $(dirname $0); pwd -P`
+BASEDIR=${BASEDIR%/*}
+
+source "${BASEDIR}/scripts/lib/msg.sh"
+source "${BASEDIR}/scripts/lib/naonet.sh"
+source "${BASEDIR}/scripts/lib/numberToIP.sh"
+source "${BASEDIR}/scripts/lib/docker.sh"
+
+function helpMenu {
+  echo "Usage: $0 NAO"
+  echo ""
+  echo "Nao"
+  echo " either hostname, IP or number of the NAO"
+}
+
+function run {
+  TARGET_PORT="22"
+  while [ "$#" -gt 1 ]; do
+    case "$1" in
+      "-P")
+        shift
+        TARGET_PORT="$1"
+        ;;
+      *)
+        msg -e "Failed to parse \"$1\"!"
+        helpMenu
+        return 1
+        ;;
+    esac
+    shift
+  done
+
+  if [ "$#" -ne 1 ]; then
+    helpMenu
+    return 1
+  fi
+  NAO=$(numberToIP "$1")
+  copysshkey "${BASEDIR}" "${NAO}" "${TARGET_PORT}"
+  if [ "$?" -ne 0 ]; then
+    msg -e "Could not connect to ${NAO}!"
+    return 1
+  fi
+  return 0
+}
+
+handleDocker "${BASEDIR}" "$@"
