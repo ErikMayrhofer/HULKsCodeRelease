@@ -55,3 +55,20 @@ It basically tells the Hulks wether or not they should enable all vision functio
     Creates a symlink from ~/naotoolchain/ to the {CodeRelease_Toolchain_Repo} (according to toolchain_type and toolchain_version)
 * update
     Creates a symlink from ~/naotoolchain/ to the {CodeRelease_Toolchain_Repo} (according to toolchain_type and toolchain_version) (would also try to download the toolchains if the server still existed)
+
+## upload ##
+
+* Compiles the code with the toolchain
+* Downloads logfiles from Nao
+* Stops all processes related to the Hulks
+* Restarts NaoQi
+* Uploads file Target
+* Restarts all processes previosly killed
+
+## moduleSetup ##
+
+Edits a config file for deployment to set which tuuhNao Modules to load (So it is basically useless)
+
+## hardwareStatus ##
+
+Updates a private HULKs Repo where information about the hardware of the NAOs is kept (SerialNum,....) (Useless)
