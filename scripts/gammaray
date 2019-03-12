@@ -33,6 +33,7 @@ function run {
   SYSROOT_ONLY=false
   # whether all other sysroots should be removed from the NAO
   PURGE=false
+  VM=false
   # prepare parameters
   PARAMETERS=""
   while [ "$#" -gt 0 ]; do
@@ -65,6 +66,9 @@ function run {
       "-p" | "--purge")
         PURGE=true
         ;;
+        "-v")
+        VM=true
+        ;;
       "-h" | "--help")
         helpMenu
         return 0
@@ -92,6 +96,9 @@ function run {
   NAO="$1"
   if [ "${ADDRESS}" == "" ]; then
     ADDRESS=$(numberToIP "${NAO}")
+  fi
+  if [ "$VM" = "true" ];then
+    ADDRESS=localhost
   fi
 
   if ! ${SYSROOT_ONLY}; then

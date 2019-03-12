@@ -3,7 +3,7 @@ project(launcher CXX)
 
 add_executable(launcher Duckinga.cpp)
 target_link_libraries(launcher Duckburg)
-
+target_link_libraries(launcher atomic)
 configure_file(conf.xml conf.xml)
 
 target_include_directories(launcher SYSTEM PUBLIC ${TUHH_DEPS_INCLUDE_DIRECTORIES})

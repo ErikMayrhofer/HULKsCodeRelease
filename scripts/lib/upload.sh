@@ -8,7 +8,12 @@ function upload {
     return 1
   fi
   local BASEDIR="$1"
+
   local RSYNC_TARGET="$2"
+  TARGET_PORT=""
+  if [[ $RSYNC_TARGET="localhost" ]]; then
+    TARGET_PORT="-p 2222"
+  fi
     findnao $RSYNC_TARGET
   if [ "$?" -ne 0 ]; then
     return 1
@@ -51,7 +56,7 @@ function upload {
   fi
 
   # ssh connection command with parameters; check also the top config part
-  local SSH_CMD="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l ${SSH_USERNAME} -i \"${SSH_KEY}\""
+  local SSH_CMD="ssh $TARGET_PORT -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l ${SSH_USERNAME} -i \"${SSH_KEY}\""
 
   # parameters for rsync
   local RSYNC_PARAMETERS="-trzKLP ${RSYNC_EXCLUDE}"

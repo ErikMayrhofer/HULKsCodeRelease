@@ -46,6 +46,8 @@ function run {
   RESTART_NAOQI=false
   # set default job number to cores + 1
   JOBS=$(njobs)
+  # set default upload to vm as false
+  VM=false
   # read the build type from a file
   if [ -f "${BASEDIR}/.current.bt" ]; then
     BUILD_TYPE=`cat "${BASEDIR}/.current.bt"`
@@ -108,6 +110,9 @@ function run {
         RESTART_NAOQI=true
         RESTART=true
         ;;
+        "-v")
+        VM=true
+        ;;
       "-j" | "--jobs")
         shift
         if [ "$#" -eq 0 ]; then
@@ -140,7 +145,13 @@ function run {
   fi
 
   # last parameter has to be the hostname of the NAO
+
   NAO=$(numberToIP "$1")
+  if [ "$VM" = "true" ]; then
+     NAO=localhost
+  fi
+
+
 
   if [ "${BUILD_TYPE}" == "" ]; then
     msg -e "It seems you haven't compiled before! You need to specify a build type to this script."
