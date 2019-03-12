@@ -9,7 +9,11 @@
 #include <unistd.h>
 #include <linux/videodev2.h>
 
-void NaoCamera::init() {
+skeleton::NaoCamera::NaoCamera(int pos) : camFile() {
+    camFile = "/dev/video"+std::to_string(pos);
+}
+
+void skeleton::NaoCamera::init() {
     if((fd= open(camFile.c_str(), O_RDWR))<0){
         perror("open");
         exit(1);
@@ -68,14 +72,14 @@ void NaoCamera::init() {
         exit(1);
     }
 }
-void NaoCamera::start() {
+void skeleton::NaoCamera::start() {
     type = buffer.type;
     if(ioctl(fd, VIDIOC_STREAMON, &type) < 0){
         perror("VIDIOC_STREAMON");
         exit(1);
     }
 }
-Image* NaoCamera::takePicture() {
+Image* skeleton::NaoCamera::takePicture() {
     uint8_t * rgb = static_cast<uint8_t *>(malloc(sizeof(uint8_t) * 3 * buffer.length / 2));
     memset(buffer_map, 0, buffer.length);
     if (ioctl(fd, VIDIOC_QBUF, &buffer) < 0) {
@@ -102,7 +106,7 @@ Image* NaoCamera::takePicture() {
     Image *image = new Image(camFile.at(camFile.size()-1),rgb,format.fmt.pix.width,format.fmt.pix.height);
     return image;
 }
-NaoCamera::~NaoCamera() {
+skeleton::NaoCamera::~NaoCamera() {
     if (ioctl(fd, VIDIOC_STREAMOFF, &type) < 0) {
         perror("VIDIOC_STREAMOFF");
         exit(1);
@@ -110,7 +114,7 @@ NaoCamera::~NaoCamera() {
     close(fd);
 }
 
-void NaoCamera::yuv2rgb(uint8_t (*array), int rgbc,int y,int u,int v){
+void skeleton::NaoCamera::yuv2rgb(uint8_t (*array), int rgbc,int y,int u,int v){
     array[rgbc+0]=(uint8_t)(y + 1.140*v);
     array[rgbc+1]=(uint8_t)(y - 0.395*u - 0.581*v);
     array[rgbc+2]=(uint8_t)(y + 2.032*u);

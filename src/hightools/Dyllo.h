@@ -10,11 +10,15 @@
 #include <iostream>
 #include <sstream>
 #include <boost/dll/import.hpp>
+#include "../core/Logger.h"
 
 /*
 #define DL_CLASS_PUBLISH(Classname) \
 extern "C" Classname* __dl_create_##Classname(){return new Classname;}
 */
+
+#undef LOG_TAG
+#define LOG_TAG "Dyllo"
 
 #define DL_CLASS_PUBLISH(Classname) \
 extern "C" BOOST_SYMBOL_EXPORT Classname Classname; \
@@ -48,13 +52,20 @@ T* dl_load_class(const std::string &filename, const std::string& classname){
     auto * myClass = create();
     return myClass;*/
 
-    boost::filesystem::path lib_path(filename);
-    auto myEngine = boost::dll::import<T>(
-            lib_path,
-            classname,
-            boost::dll::load_mode::append_decorations
-            ).get();
-    return myEngine;
+    try {
+        boost::filesystem::path lib_path(filename);
+        auto myEngine = boost::dll::import<T>(
+                lib_path,
+                classname,
+                boost::dll::load_mode::append_decorations
+        ).get();
+        return myEngine;
+    }catch(boost::system::system_error& error){
+        LFERR("Couldn't load engine '"<<classname<<"' from '"<<filename<<"'")
+        throw;
+    }
 }
 
 #endif //DUCKBURG_DLSIMPLE_H
+
+#undef LOG_TAG

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(Core)
+project(Core CXX)
 
 #set sources of your project here
 set(HEADERS
@@ -18,7 +18,7 @@ set(SOURCES
         Memory.cpp
 )
 
-add_library(Duckburg OBJECT ${SOURCES} ${HEADERS})
+add_library(Duckburg SHARED ${SOURCES} ${HEADERS})
 
 
 target_include_directories(Duckburg SYSTEM PUBLIC ${TUHH_DEPS_INCLUDE_DIRECTORIES})
