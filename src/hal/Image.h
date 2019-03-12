@@ -14,7 +14,7 @@ public:
     uint8_t * rgb;
     uint8_t * getPixel(int x,int y);
 
-    *Image(char cam, uint8_t *rgb, int width, int height);
+    Image(char cam, uint8_t *rgb, int width, int height);
 
     virtual ~Image();
 

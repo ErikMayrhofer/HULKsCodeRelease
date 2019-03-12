@@ -54,8 +54,19 @@ endif(NAO)
 
 add_subdirectory(src/core)
 add_subdirectory(src/engines)
-#add_subdirectory(src/hal)
 add_subdirectory(src/launcher)
+
+include(ExternalProject)
+ExternalProject_Add(hal
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/hal
+    DOWNLOAD_COMMAND ""
+    UPDATE_COMMAND ""
+    CMAKE_ARGS
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -DOPTIMIZE_FOR_TARGET=ATOM
+    -DTOOLCHAIN_DIR=${TOOLCHAIN_DIR}
+    BUILD_ALWAYS 1
+    INSTALL_COMMAND)
 
 if(IDE)
   add_subdirectory(../tools "${CMAKE_CURRENT_BINARY_DIR}/tools")
