@@ -8,6 +8,9 @@ option(SIMROBOT "Build for simrobot" OFF)
 option(QT_WEBSOCKET "Build for qtwebsockets" OFF)
 option(IDE "Include the tools repo into the list of files" OFF)
 
+set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "")
+
 if(NAO AND NAONATIVE)
   if(NOT TOOLCHAIN_DIR)
     set(TOOLCHAIN_DIR "${CMAKE_SOURCE_DIR}/toolchain")
