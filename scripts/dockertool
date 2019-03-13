@@ -12,10 +12,15 @@ function helpMenu {
   echo "Usage: $0 COMMAND [OPTIONS]"
   echo ""
   echo "Command"
-  echo " command to send to the dockertool (one out of enable, disable, build)"
+  echo " command to send to the dockertool (one out of enable, disable, build, exec)"
   echo ""
   echo "Options"
   echo " command-specific options"
+  echo "Descriptions"
+  echo " $0 exec [COMMAND]      Executes the given command in the docker-container"
+  echo " $0 enable              Enables default execution of scripts in docker-container"
+  echo " $0 disable             Disable default execution of scripts in docker-container"
+  echo " $0 build               Build the Container"
 }
 
 function run {
@@ -37,6 +42,10 @@ function run {
       ;;
     build)
       buildDocker "${BASEDIR}"
+      ;;
+    exec)
+      shift
+      execDockerCommand "${BASEDIR}" "$@"
       ;;
     *)
       msg -e "Unknown command \"$1\"!"
