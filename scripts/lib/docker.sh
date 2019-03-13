@@ -17,7 +17,7 @@ function handleDocker {
   fi
   if ${USE_DOCKER}; then
     echo "================= ON DOCKER ================="
-	if [ $OS = "Windows_NT" ]; then
+	if [ "$OS" = "Windows_NT" ]; then
 		winpty docker run -it --net host --rm -u $UID:$GID -v "/${BASEDIR}://nao" --entrypoint //nao/scripts/`basename "$0"` "${DOCKER_IMAGE_NAME}" "$@"
 	else
 		docker run -it --net host --rm -u $UID:$GID -v "${BASEDIR}:/nao" --entrypoint /nao/scripts/`basename "$0"` "${DOCKER_IMAGE_NAME}" "$@"
