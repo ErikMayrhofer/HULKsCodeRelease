@@ -56,7 +56,7 @@ function execDockerCommand {
 
   echo "================= ON DOCKER ================="
   echo " Docker> $@"
-  if [[ $OS = "Windows_NT" ]]; then
+  if [[ "$OS" = "Windows_NT" ]]; then
 		winpty docker run -it --net host --rm -u $UID:$GID -v "/${BASEDIR}://nao" "${DOCKER_IMAGE_NAME}" "$@"
 	else
 		docker run -it --net host --rm -u $UID:$GID -v "${BASEDIR}:/nao" "${DOCKER_IMAGE_NAME}" "$@"
