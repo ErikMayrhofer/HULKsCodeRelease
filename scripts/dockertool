@@ -20,7 +20,7 @@ function helpMenu {
   echo " $0 exec [COMMAND]      Executes the given command in the docker-container"
   echo " $0 enable              Enables default execution of scripts in docker-container"
   echo " $0 disable             Disable default execution of scripts in docker-container"
-  echo " $0 build               Build the Container"
+  echo " $0 build               Build the Containerz"
 }
 
 function run {
@@ -41,7 +41,8 @@ function run {
       disableDocker "${BASEDIR}"
       ;;
     build)
-      buildDocker "${BASEDIR}"
+      shift
+      buildDocker "${BASEDIR}" "$@"
       ;;
     exec)
       shift

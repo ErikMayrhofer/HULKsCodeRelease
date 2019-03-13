@@ -2,6 +2,7 @@
 
 DOCKER_IMAGE_NAME="roboducker"
 
+source "${BASEDIR}/scripts/lib/polyfill.sh"
 source "${BASEDIR}/scripts/lib/msg.sh"
 
 function iAmInDocker {
@@ -30,7 +31,9 @@ function handleDocker {
 function buildDocker {
   local BASEDIR="$1"
   shift
-  docker build -t "${DOCKER_IMAGE_NAME}" "${BASEDIR}/tools/docker/"
+  UNAME=$(whoami)
+  echo "Building Docker using $UID:$GID for user $UNAME"
+  docker build --build-arg USER_ID=$UID --build-arg GROUP_ID=$GID --build-arg USER_NAME=$UNAME -t "${DOCKER_IMAGE_NAME}" "${BASEDIR}/tools/docker/" $@
 }
 
 function enableDocker {
@@ -52,7 +55,7 @@ function execDockerCommand {
   shift
 
   echo "================= ON DOCKER ================="
-
+  echo " Docker> $@"
   if [[ $OS = "Windows_NT" ]]; then
 		winpty docker run -it --net host --rm -u $UID:$GID -v "/${BASEDIR}://nao" "${DOCKER_IMAGE_NAME}" "$@"
 	else
