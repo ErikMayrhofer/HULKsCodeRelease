@@ -4,6 +4,7 @@ BASEDIR=`cd $(dirname $0); pwd -P`
 
 DUCKLIBPATH="${BASEDIR}/lib"
 
+cd ${BASEDIR}
 cd bin
 
 echo "==================STARTING DUCKBURG==============="
