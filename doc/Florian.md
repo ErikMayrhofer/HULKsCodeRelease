@@ -2,10 +2,9 @@
 
 ## Notes
 
-* Rename hulk processes in pregame and postgame scripts to duckinga.
-* Hardlinks (ln) actually works on Windows.
-* When using Windows, Git Bash and Docker, the docker ... line in the docker.sh scripts needs to be changed to winpty docker ... because otherwise it will fail because there is no TTY shell.
+* Hardlinks (ln) actually work on Windows.
 * When using Docker Toolbox, you have to link your working directory to your VirtualBox as a shared folder with a matching name (e.g. D:\Documents\Work\Directory to d/Documents/Work/Directory).
+* When using Docker Toolbox, you also have to forward a port (e.g. 2375).
 
 ## Scripts
 
