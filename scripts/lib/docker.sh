@@ -52,13 +52,21 @@ function disableDocker {
 
 function execDockerCommand {
   local BASEDIR="$1"
+  local ROOT="$2"
   shift
+  shift
+
+  if [[ $ROOT = "false" ]]; then
+    usergroup="$UID:$GID"
+  else
+    usergroup="root:root"
+  fi
 
   echo "================= ON DOCKER ================="
   echo " Docker> $@"
   if [[ "$OS" = "Windows_NT" ]]; then
-		winpty docker run -it --net host --rm -u $UID:$GID -v "/${BASEDIR}://nao" "${DOCKER_IMAGE_NAME}" "$@"
+		winpty docker run -it --net host --rm -u $usergroup -v "/${BASEDIR}://nao" "${DOCKER_IMAGE_NAME}" "$@"
 	else
-		docker run -it --net host --rm -u $UID:$GID -v "${BASEDIR}:/nao" "${DOCKER_IMAGE_NAME}" "$@"
+		docker run -it --net host --rm -u $usergroup -v "${BASEDIR}:/nao" "${DOCKER_IMAGE_NAME}" "$@"
 	fi
 }

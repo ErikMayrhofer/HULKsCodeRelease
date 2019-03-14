@@ -46,7 +46,11 @@ function run {
       ;;
     exec)
       shift
-      execDockerCommand "${BASEDIR}" "$@"
+      execDockerCommand "${BASEDIR}" false "$@"
+      ;;
+    suexec)
+      shift
+      execDockerCommand "${BASEDIR}" true "$@"
       ;;
     *)
       msg -e "Unknown command \"$1\"!"
