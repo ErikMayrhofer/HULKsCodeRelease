@@ -11,4 +11,4 @@ RUN apt-get update && \
 
 RUN groupadd -g $GROUP_ID ducks
 RUN useradd -d /nao --uid $USER_ID --gid $GROUP_ID $USER_NAME
-USER dagobert
+USER $USER_NAME
