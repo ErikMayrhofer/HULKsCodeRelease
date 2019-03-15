@@ -6,7 +6,7 @@
 #include <boost/signal.hpp>
 #include <boost/bind.hpp>
 #include <iostream>
-#include "hallowlevel"
+#include "../hallowlevel.h"
 
 skeleton::NaoSensors::NaoSensors(){
     AlTouchProxy::FrontTactilTouched().connect(bind(&NaoSensors::receivedFrontTacticalHead, this));

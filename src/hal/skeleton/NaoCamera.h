@@ -23,7 +23,7 @@ namespace skeleton {
         virtual ~NaoCamera();
 
     private:
-        void yuv2rgb(uint8_t (*array), int rgbc, int y, int u, int v);
+        void yuv2rgb(uint8_t (**array), int rgbc, int y, int u, int v);
 
         std::string camFile;
         struct v4l2_requestbuffers buffrequest;

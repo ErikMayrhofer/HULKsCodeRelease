@@ -80,7 +80,7 @@ void skeleton::NaoCamera::start() {
     }
 }
 Image* skeleton::NaoCamera::takePicture() {
-    uint8_t * rgb = static_cast<uint8_t *>(malloc(sizeof(uint8_t) * 3 * buffer.length / 2));
+    uint8_t ** rgb = static_cast<uint8_t **>(malloc(sizeof(uint8_t) * 3 * buffer.length / 2));
     memset(buffer_map, 0, buffer.length);
     if (ioctl(fd, VIDIOC_QBUF, &buffer) < 0) {
         perror("VIDIOC_QBUF");
@@ -92,8 +92,8 @@ Image* skeleton::NaoCamera::takePicture() {
         perror("VIDIOC_DQBUF");
         exit(1);
     }
-    int rgbc = 0;
-    for(int i=0;i<buffer.length;i+=4){
+    uint32_t rgbc = 0;
+    for(uint32_t i=0;i<buffer.length;i+=4){
         int u=buffer_map[i];
         int y1 = buffer_map[i+1];
         int v  = buffer_map[i+2];
@@ -114,8 +114,8 @@ skeleton::NaoCamera::~NaoCamera() {
     close(fd);
 }
 
-void skeleton::NaoCamera::yuv2rgb(uint8_t (*array), int rgbc,int y,int u,int v){
-    array[rgbc+0]=(uint8_t)(y + 1.140*v);
-    array[rgbc+1]=(uint8_t)(y - 0.395*u - 0.581*v);
-    array[rgbc+2]=(uint8_t)(y + 2.032*u);
+void skeleton::NaoCamera::yuv2rgb(uint8_t (**array), int rgbc,int y,int u,int v){
+    array[rgbc][0]=(uint8_t)(y + 1.140*v);
+    array[rgbc][1]=(uint8_t)(y - 0.395*u - 0.581*v);
+    array[rgbc][2]=(uint8_t)(y + 2.032*u);
 }
