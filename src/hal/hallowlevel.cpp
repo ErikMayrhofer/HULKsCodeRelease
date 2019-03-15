@@ -58,7 +58,7 @@ namespace hallowlevel {
     }
 
     bool killTask(const int& taskID){
-        motion.killTask(taskID);
+        return motion.killTask(taskID);
     }
 
     void killTasksUsingResources(const std::vector<std::string>& resourceNames){
