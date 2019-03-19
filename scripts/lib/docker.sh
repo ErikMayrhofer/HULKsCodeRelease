@@ -33,7 +33,8 @@ function buildDocker {
   shift
   UNAME=$(whoami)
   echo "Building Docker using $UID:$GID for user $UNAME"
-  docker build --build-arg USER_ID=$UID --build-arg GROUP_ID=$GID --build-arg USER_NAME=$UNAME -t "${DOCKER_IMAGE_NAME}" "${BASEDIR}/tools/docker/" $@
+  docker-compose --project-name "${DOCKER_IMAGE_NAME}" -f "${BASEDIR}/tools/docker/docker-compose.yml"  build  --build-arg USER_ID=$UID --build-arg GROUP_ID=$GID --build-arg USER_NAME=$UNAME   $@
+  docker tag roboducker_roboducker roboducker
 }
 
 function enableDocker {
