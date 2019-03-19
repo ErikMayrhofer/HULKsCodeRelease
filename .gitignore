@@ -25,3 +25,5 @@ install_manifest.txt
 .DS_Store
 
 tools/ctc-hulks/log*\.txt
+
+\.bash_history

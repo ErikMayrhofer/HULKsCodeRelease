@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Get base directory for better referencing
+BASEDIR=`cd $(dirname $0); pwd -P`
+BASEDIR=${BASEDIR%/*}
+
+source "${BASEDIR}/scripts/lib/msg.sh"
+source "${BASEDIR}/scripts/lib/docker.sh"
+source "${BASEDIR}/scripts/lib/dependencies.sh"
+
+function helpMenu {
+  echo "Usage: $0 COMMAND [OPTIONS]"
+  echo ""
+  echo "Command"
+  echo " command to send to the dockertool (one out of enable, disable, build, exec)"
+  echo ""
+  echo "Options"
+  echo " command-specific options"
+  echo "Descriptions"
+  echo " $0 exec [COMMAND]      Executes the given command in the docker-container"
+  echo " $0 enable              Enables default execution of scripts in docker-container"
+  echo " $0 disable             Disable default execution of scripts in docker-container"
+  echo " $0 build               Build the Containerz"
+}
+
+function run {
+  assertDependenciesHost
+
+  if [ "$#" -lt 1 ]; then
+    helpMenu
+    return 1
+  fi
+
+  case "$1" in
+    enable)
+      msg -s "Enabling Docker"
+      enableDocker "${BASEDIR}"
+      ;;
+    disable)
+      msg -s "Disabling Docker"
+      disableDocker "${BASEDIR}"
+      ;;
+    build)
+      shift
+      buildDocker "${BASEDIR}" "$@"
+      ;;
+    exec)
+      shift
+      execDockerCommand "${BASEDIR}" false "$@"
+      ;;
+    suexec)
+      shift
+      execDockerCommand "${BASEDIR}" true "$@"
+      ;;
+    *)
+      msg -e "Unknown command \"$1\"!"
+      helpMenu
+      return 1
+      ;;
+  esac
+  return 0
+}
+
+#TODO Untested: Was not tested if actually refusing when in docker
+if iAmInDocker; then
+    msg -e "Refusing to execute dockertool while in docker"
+else
+    run "$@"
+fi
+

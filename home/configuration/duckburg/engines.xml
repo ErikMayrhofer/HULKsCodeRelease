@@ -1,16 +1,16 @@
 <ENGINES>
     <ENGINE>
-        <FILENAME>../lib/libRemoteEngine.so</FILENAME>
-        <NAME>RemoteEngine</NAME>
-        <PROPERTIES>
-            <PORT>8081</PORT>
-        </PROPERTIES>
-    </ENGINE>
-    <ENGINE>
         <FILENAME>../lib/libLoggingEngine.so</FILENAME>
         <NAME>LoggingEngine</NAME>
         <PROPERTIES>
             <TEST>Tust</TEST>
+        </PROPERTIES>
+    </ENGINE>
+    <ENGINE>
+        <FILENAME>../lib/libRemoteEngine.so</FILENAME>
+        <NAME>RemoteEngine</NAME>
+        <PROPERTIES>
+            <PORT>8081</PORT>
         </PROPERTIES>
     </ENGINE>
 </ENGINES>

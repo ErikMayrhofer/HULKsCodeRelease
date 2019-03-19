@@ -4,18 +4,20 @@ source "${BASEDIR}/scripts/lib/logs.sh"
 source "${BASEDIR}/scripts/lib/findnao.sh"
 function upload {
 
-  if [ "$#" -ne 5 ]; then
+  if [ "$#" -ne 6 ]; then
     return 1
   fi
   local BASEDIR="$1"
+
   local RSYNC_TARGET="$2"
+  local TARGET_PORT="$3"
     findnao $RSYNC_TARGET
   if [ "$?" -ne 0 ]; then
     return 1
   fi
-  local BUILD_TYPE="$3"
-  local UPLOAD_CONFIG=$4
-  local DELETE_FILES=$5
+  local BUILD_TYPE="$4"
+  local UPLOAD_CONFIG=$5
+  local DELETE_FILES=$6
   # files that should be excluded
   local RSYNC_EXCLUDE="--exclude=*webots* --exclude=*.gitkeep --exclude=*.touch"
   # ssh login
@@ -44,6 +46,8 @@ function upload {
   #ln -s "${BASEDIR}/home/poses"   "${TMP_DIR}/naoqi/poses"
 
   ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/launcher/launcher" "${TMP_DIR}/naoqi/bin/launcher"
+  ln -s "${BASEDIR}/build/nao/${BUILD_TYPE}/src/core/libDuckburg.so" "${TMP_DIR}/naoqi/lib/"
+  ln -s "${BASEDIR}/home/launch.sh" "${TMP_DIR}/naoqi/launch.sh"
   ln -s ${BASEDIR}/build/nao/${BUILD_TYPE}/src/engines/lib*.so ${TMP_DIR}/naoqi/lib/   # quotation marks removed because of glob regex
   # ssh wants the key permissions to be like that
   if [ -e "${SSH_KEY}" ]; then
@@ -51,7 +55,7 @@ function upload {
   fi
 
   # ssh connection command with parameters; check also the top config part
-  local SSH_CMD="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l ${SSH_USERNAME} -i \"${SSH_KEY}\""
+  local SSH_CMD="ssh -p $TARGET_PORT -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l ${SSH_USERNAME} -i \"${SSH_KEY}\""
 
   # parameters for rsync
   local RSYNC_PARAMETERS="-trzKLP ${RSYNC_EXCLUDE}"
